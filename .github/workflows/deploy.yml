@@ -5,28 +5,10 @@ on:
     branches: [main]
 
 jobs:
-  deploy:
+  notify:
     runs-on: ubuntu-latest
     steps:
-      - name: Deploy via SSH
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USER }}
-          key: ${{ secrets.VPS_SSH_KEY }}
-          host_key: ${{ secrets.VPS_HOST_KEY }}
-          env:
-            VPS_ENV: ${{ secrets.VPS_ENV }}
-          script: |
-            set -e
-            cd /home/moen/opencodeproject/shorturl
-            [ -f .env ] || printf '%s\n' "$VPS_ENV" > .env
-            git pull origin main
-            docker compose up -d --build
-            docker compose ps
-            for i in 1 2 3 4 5; do
-              code=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8090/ || true)
-              echo "health check #$i -> HTTP $code"
-              [ "$code" = "200" ] && break
-              sleep 3
-            done
+      - name: Deploy otomatis via VPS poller
+        run: |
+          echo "Push terdeteksi. Deploy ke VPS ditangani oleh poller lokal"
+          echo "(scripts/deploy-poll.sh via cron user moen, tiap 2 menit)."
