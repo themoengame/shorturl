@@ -23,3 +23,5 @@ jobs:
             [ -f .env ] || printf '%s\n' "$VPS_ENV" > .env
             git pull origin main
             docker compose up -d --build
+            docker compose ps
+            curl -s -o /dev/null -w "app HTTP %{http_code}\n" http://localhost:8090/ || true
