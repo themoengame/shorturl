@@ -1,0 +1,8 @@
+CREATE TABLE IF NOT EXISTS urls (
+    id           INT AUTO_INCREMENT PRIMARY KEY,
+    code         VARCHAR(10) NOT NULL UNIQUE,
+    original_url TEXT NOT NULL,
+    created_at   TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE INDEX IF NOT EXISTS idx_urls_code ON urls (code);
