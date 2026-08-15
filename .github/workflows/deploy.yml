@@ -24,4 +24,9 @@ jobs:
             git pull origin main
             docker compose up -d --build
             docker compose ps
-            curl -s -o /dev/null -w "app HTTP %{http_code}\n" http://localhost:8090/ || true
+            for i in 1 2 3 4 5; do
+              code=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8090/ || true)
+              echo "health check #$i -> HTTP $code"
+              [ "$code" = "200" ] && break
+              sleep 3
+            done
